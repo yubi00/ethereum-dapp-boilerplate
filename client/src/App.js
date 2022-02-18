@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import './App.css';
 import Token from './components/Token';
+import Transfer from './components/Transfer';
 import { Web3Context } from './providers/Web3Provider';
 
 function App() {
@@ -13,7 +14,13 @@ function App() {
       </div>
     );
 
-  return <Token />;
+  return (
+    <>
+      <Token />
+      <Transfer option="token" />
+      <Transfer option="ether" />
+    </>
+  );
 }
 
 export default App;

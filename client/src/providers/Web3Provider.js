@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { ethers } from 'ethers';
 import getWeb3 from '../utils/web3';
 
 export const Web3Context = createContext();
@@ -57,7 +58,26 @@ function Web3Provider({ children }) {
     }
   };
 
-  window.ethereum.on('accountsChanged', (newAccount) => {
+  const sendToken = async (address, amount) => {
+    try {
+      setLoading(true);
+      const contractWithSigner = await contract.connect(signer);
+
+      await contractWithSigner.transfer(
+        address,
+        ethers.utils.parseUnits(amount, 18)
+      );
+      setLoading(false);
+    } catch (error) {
+      console.log('error sending token: ', error);
+      setLoading(false);
+      setError(error.message);
+    }
+  };
+
+  const sendEther = (address) => {};
+
+  window.ethereum.on('accountsChanged', ([newAccount]) => {
     setAccount(newAccount);
   });
 
@@ -70,6 +90,8 @@ function Web3Provider({ children }) {
         contract,
         signer,
         account,
+        sendToken,
+        sendEther,
         connectToWallet,
       }}
     >
