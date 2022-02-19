@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\projects\\smart-contracts\\contracts\\Token.sol": {
-      "lastModificationDate": 1644143844030,
+      "lastModificationDate": 1645243279286,
       "contentHash": "2195afc0cb19724bd7b5d72220b1163a",
       "sourceName": "contracts/Token.sol",
       "solcConfig": {

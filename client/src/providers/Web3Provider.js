@@ -59,13 +59,14 @@ function Web3Provider({ children }) {
   };
 
   const sendToken = async (address, amount) => {
+    console.log(`Sending ${amount} YBC tokens to ${address}`);
     try {
       setLoading(true);
       const contractWithSigner = await contract.connect(signer);
 
       await contractWithSigner.transfer(
         address,
-        ethers.utils.parseUnits(amount, 18)
+        ethers.utils.parseUnits(amount.toString(), 18)
       );
       setLoading(false);
     } catch (error) {
@@ -75,7 +76,9 @@ function Web3Provider({ children }) {
     }
   };
 
-  const sendEther = (address) => {};
+  const sendEther = (address, amount) => {
+    console.log(`Sending ${amount} ETH to ${address}`);
+  };
 
   window.ethereum.on('accountsChanged', ([newAccount]) => {
     setAccount(newAccount);
@@ -90,6 +93,7 @@ function Web3Provider({ children }) {
         contract,
         signer,
         account,
+        setError,
         sendToken,
         sendEther,
         connectToWallet,

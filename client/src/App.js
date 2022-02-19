@@ -1,11 +1,13 @@
 import { useContext } from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import Token from './components/Token';
 import Transfer from './components/Transfer';
 import { Web3Context } from './providers/Web3Provider';
 
 function App() {
-  const { account, connectToWallet } = useContext(Web3Context);
+  const { account, connectToWallet, sendEther, sendToken } =
+    useContext(Web3Context);
 
   if (!account)
     return (
@@ -15,11 +17,19 @@ function App() {
     );
 
   return (
-    <>
+    <BrowserRouter>
       <Token />
-      <Transfer option="token" />
-      <Transfer option="ether" />
-    </>
+      <Routes>
+        <Route
+          path="/send-token"
+          element={<Transfer option="token" send={sendToken} />}
+        />
+        <Route
+          path="/send-ether"
+          element={<Transfer option="ether" send={sendEther} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

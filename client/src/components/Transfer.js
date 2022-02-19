@@ -1,36 +1,43 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useState } from 'react';
 import { Web3Context } from '../providers/Web3Provider';
 
-function Transfer({ option }) {
-  const { sendToken, loading } = useContext(Web3Context);
-  const amountRef = useRef(null);
-  const addressRef = useRef(null);
+function Transfer({ option, send }) {
+  const { loading, error, setError } = useContext(Web3Context);
+  const [amount, setAmount] = useState('');
+  const [address, setAddress] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (amount === '' || address === '') {
+      setError('Please enter both of the address and amount');
+      return;
+    }
+
+    send(address, amount);
+  };
 
   return (
-    <div>
-      <h1>Send {option} </h1>;
+    <form onSubmit={handleSubmit}>
+      <h1>Send {option} </h1>
+      {error && <h3>{error}</h3>}
       <input
+        value={amount}
         placeholder={`amount in ${option}`}
-        ref={amountRef}
         onChange={(e) => {
-          amountRef.current.value = e.target.value;
+          setAmount(e.target.value);
+          setError('');
         }}
       />
       <input
+        value={address}
         placeholder="address"
-        ref={addressRef}
         onChange={(e) => {
-          addressRef.current.value = e.target.value;
+          setAddress(e.target.value);
+          setError('');
         }}
       />
-      <button
-        onClick={() =>
-          sendToken(addressRef?.current?.value, amountRef?.current?.value)
-        }
-      >
-        {loading ? 'Loading...' : 'Send'}
-      </button>
-    </div>
+      <button type="submit">{loading ? 'Loading...' : 'Send'}</button>
+    </form>
   );
 }
 
