@@ -76,8 +76,17 @@ function Web3Provider({ children }) {
     }
   };
 
-  const sendEther = (address, amount) => {
-    console.log(`Sending ${amount} ETH to ${address}`);
+  const sendEther = async (address, value) => {
+    console.log(`Sending ${value} ETH to ${address}`);
+    try {
+      await signer.sendTransaction({
+        to: address,
+        value: ethers.utils.parseEther(value.toString()).toHexString(),
+      });
+    } catch (error) {
+      console.log('error sending ether: ', error);
+      setError(error.message);
+    }
   };
 
   window.ethereum.on('accountsChanged', ([newAccount]) => {

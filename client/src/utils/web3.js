@@ -25,8 +25,11 @@ const getWeb3 = () =>
       }
       // Fallback to localhost or public eth network such as infura; use dev console port by default...
       else {
-        const provider = new ethers.providers.FallbackProvider(
-          `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_PRIVATE_KEY}`
+        //for connection to main net
+        // provider = new ethers.providers.getDefaultProvider()
+        const provider = new ethers.providers.InfuraProvider(
+          'ropsten',
+          process.env.REACT_APP_INFURA_PRIVATE_KEY
         );
         const web3 = new ethers.providers.Web3Provider(provider);
         const signer = web3.getSigner();

@@ -13,8 +13,8 @@ function Token() {
         const tokenBalance = await contract.balanceOf(account.toString());
         const balance = await web3.getBalance(account);
         setBalance({
-          eth: ethers.utils.formatEther(balance),
-          token: ethers.utils.formatUnits(tokenBalance, 18),
+          eth: ethers.utils.formatEther(balance.toString()),
+          token: ethers.utils.formatUnits(tokenBalance.toString(), 18),
         });
       } catch (error) {
         console.log(error);
