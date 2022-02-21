@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Token from './components/Token';
 import Transfer from './components/Transfer';
@@ -22,11 +22,11 @@ function App() {
       <Routes>
         <Route
           path="/send-token"
-          element={<Transfer option="token" send={sendToken} />}
+          element={<Transfer option="Token" send={sendToken} />}
         />
         <Route
           path="/send-ether"
-          element={<Transfer option="ether" send={sendEther} />}
+          element={<Transfer option="Ether" send={sendEther} />}
         />
       </Routes>
     </BrowserRouter>

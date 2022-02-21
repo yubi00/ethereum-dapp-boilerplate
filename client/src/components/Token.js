@@ -1,26 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Web3Context } from '../providers/Web3Provider';
-import { ethers } from 'ethers';
 import { Link } from 'react-router-dom';
 
 function Token() {
-  const { contract, account, web3 } = useContext(Web3Context);
-  const [balance, setBalance] = useState(null);
+  const { contract, account, getBalance, balance } = useContext(Web3Context);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const tokenBalance = await contract.balanceOf(account.toString());
-        const balance = await web3.getBalance(account);
-        setBalance({
-          eth: ethers.utils.formatEther(balance.toString()),
-          token: ethers.utils.formatUnits(tokenBalance.toString(), 18),
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [web3, contract, account]);
+    getBalance(account);
+  }, [account]);
 
   return (
     <div>

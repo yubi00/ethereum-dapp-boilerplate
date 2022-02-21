@@ -7,6 +7,7 @@ const getWeb3 = () =>
     window.addEventListener('load', async () => {
       // Modern dapp browsers...
       if (window.ethereum) {
+        console.log('connected to metamask');
         const web3 = new ethers.providers.Web3Provider(window.ethereum);
         const signer = web3.getSigner();
         try {
@@ -25,6 +26,7 @@ const getWeb3 = () =>
       }
       // Fallback to localhost or public eth network such as infura; use dev console port by default...
       else {
+        console.log('connected to infura');
         //for connection to main net
         // provider = new ethers.providers.getDefaultProvider()
         const provider = new ethers.providers.InfuraProvider(

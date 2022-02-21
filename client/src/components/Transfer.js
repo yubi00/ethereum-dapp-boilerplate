@@ -6,7 +6,7 @@ function Transfer({ option, send }) {
   const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (amount === '' || address === '') {
       setError('Please enter both of the address and amount');
@@ -14,6 +14,8 @@ function Transfer({ option, send }) {
     }
 
     send(address, amount);
+    setAmount('');
+    setAddress('');
   };
 
   return (

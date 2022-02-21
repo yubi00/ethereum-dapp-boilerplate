@@ -11,6 +11,7 @@ function Web3Provider({ children }) {
   const [account, setAccount] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [balance, setBalance] = useState(undefined);
 
   const checkIfWalletIsConnected = async () => {
     if (!window.ethereum) return alert('Please install metamask');
@@ -64,10 +65,18 @@ function Web3Provider({ children }) {
       setLoading(true);
       const contractWithSigner = await contract.connect(signer);
 
-      await contractWithSigner.transfer(
-        address,
-        ethers.utils.parseUnits(amount.toString(), 18)
-      );
+      const tx = await contractWithSigner.transfer(address, amount.toString());
+      const txReceipt = await tx.wait();
+      console.log('receipt: ', txReceipt);
+
+      const metamaskBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [account, 'latest'],
+      });
+      console.log('metamask balance: ', metamaskBalance.toString());
+
+      await getBalance(account);
+
       setLoading(false);
     } catch (error) {
       console.log('error sending token: ', error);
@@ -79,13 +88,32 @@ function Web3Provider({ children }) {
   const sendEther = async (address, value) => {
     console.log(`Sending ${value} ETH to ${address}`);
     try {
-      await signer.sendTransaction({
+      const tx = await signer.sendTransaction({
         to: address,
         value: ethers.utils.parseEther(value.toString()).toHexString(),
       });
+      await tx.wait();
+      await getBalance(account);
     } catch (error) {
       console.log('error sending ether: ', error);
       setError(error.message);
+    }
+  };
+
+  const getBalance = async (account) => {
+    console.log(`getting balance of ${account}`);
+    try {
+      const tokenBalance = await contract.balanceOf(account.toString());
+      const etherBalance = await web3.getBalance(account);
+      console.log('ether balance: ', etherBalance.toString());
+      console.log('token balance: ', tokenBalance.toString());
+      setBalance({
+        eth: ethers.utils.formatEther(etherBalance.toString()),
+        token: tokenBalance.toString(),
+      });
+    } catch (error) {
+      setError('error retrievng balance');
+      console.log(error);
     }
   };
 
@@ -102,9 +130,12 @@ function Web3Provider({ children }) {
         contract,
         signer,
         account,
+        balance,
+        setBalance,
         setError,
         sendToken,
         sendEther,
+        getBalance,
         connectToWallet,
       }}
     >
