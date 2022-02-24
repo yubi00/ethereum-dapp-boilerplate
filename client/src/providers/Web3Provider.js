@@ -69,12 +69,6 @@ function Web3Provider({ children }) {
       const txReceipt = await tx.wait();
       console.log('receipt: ', txReceipt);
 
-      const metamaskBalance = await window.ethereum.request({
-        method: 'eth_getBalance',
-        params: [account, 'latest'],
-      });
-      console.log('metamask balance: ', metamaskBalance.toString());
-
       await getBalance(account);
 
       setLoading(false);
