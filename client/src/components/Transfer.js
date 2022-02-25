@@ -21,6 +21,7 @@ function Transfer({ option, send }) {
   return (
     <form onSubmit={handleSubmit}>
       <h1>Send {option} </h1>
+      {loading && <h3>Sending {option}... </h3>}
       {error && <h3>{error}</h3>}
       <input
         value={amount}

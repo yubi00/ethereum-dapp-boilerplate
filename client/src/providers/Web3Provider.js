@@ -82,15 +82,18 @@ function Web3Provider({ children }) {
   const sendEther = async (address, value) => {
     console.log(`Sending ${value} ETH to ${address}`);
     try {
+      setLoading(true);
       const tx = await signer.sendTransaction({
         to: address,
         value: ethers.utils.parseEther(value.toString()).toHexString(),
       });
       await tx.wait();
       await getBalance(account);
+      setLoading(false);
     } catch (error) {
       console.log('error sending ether: ', error);
       setError(error.message);
+      setLoading(false);
     }
   };
 
